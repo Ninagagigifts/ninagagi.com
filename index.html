@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ninagagi Stores</title>
+<title>Ninagagi Store</title>
 <!-- Updated link to Tailwind CSS -->
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
@@ -31,14 +31,14 @@
 Categories ▼
 </button>
 <div id="dropdown-menu" class="hidden absolute bg-gray-700 text-white py-2 w-48 mt-1 rounded shadow-lg">
-<a href="#hampers" class="block px-4 py-2 hover:bg-gray-600">Gift Hampers</a>
-<a href="#birthday" class="block px-4 py-2 hover:bg-gray-600">Birthday</a>
-<a href="#baby" class="block px-4 py-2 hover:bg-gray-600">Baby</a>
-<a href="#minature" class="block px-4 py-2 hover:bg-gray-600">Minature Gifts</a>
-<a href="#returngifts" class="block px-4 py-2 hover:bg-gray-600">Return Gifts</a>
+<a href="#hampers" class="block px-4 py-2 hover:bg-gray-600" onclick="closeDropdown()">Gift Hampers</a>
+<a href="#birthday" class="block px-4 py-2 hover:bg-gray-600" onclick="closeDropdown()">Birthday</a>
+<a href="#baby" class="block px-4 py-2 hover:bg-gray-600" onclick="closeDropdown()">Baby</a>
+<a href="#minature" class="block px-4 py-2 hover:bg-gray-600" onclick="closeDropdown()">Minature Gifts</a>
+<a href="#returngifts" class="block px-4 py-2 hover:bg-gray-600" onclick="closeDropdown()">Return Gifts</a>
 </div>
 </div>
-<a href="#contact" class="hover:text-yellow-300">Contact</a>
+<a href="#contact" class="hover:text-yellow-300" onclick="closeDropdown()">Contact</a>
 </nav>
 
 <!-- Cart -->
@@ -53,12 +53,12 @@ Categories ▼
 
 <!-- Mobile Dropdown Menu -->
 <div id="mobile-menu" class="hidden md:hidden bg-gray-700 text-white py-2 px-4">
-<a href="#hampers" class="block py-2 hover:bg-gray-600">Gift Hampers</a>
-<a href="#birthday" class="block py-2 hover:bg-gray-600">Birthday</a>
-<a href="#baby" class="block py-2 hover:bg-gray-600">Baby</a>
-<a href="#minature" class="block py-2 hover:bg-gray-600">Minature Gifts</a>
-<a href="#returngifts" class="block py-2 hover:bg-gray-600">Return Gifts</a>
-<a href="#contact" class="block py-2 hover:bg-gray-600">Contact</a>
+<a href="#hampers" class="block py-2 hover:bg-gray-600" onclick="closeMobileMenu()">Gift Hampers</a>
+<a href="#birthday" class="block py-2 hover:bg-gray-600" onclick="closeMobileMenu()">Birthday</a>
+<a href="#baby" class="block py-2 hover:bg-gray-600" onclick="closeMobileMenu()">Baby</a>
+<a href="#minature" class="block py-2 hover:bg-gray-600" onclick="closeMobileMenu()">Minature Gifts</a>
+<a href="#returngifts" class="block py-2 hover:bg-gray-600" onclick="closeMobileMenu()">Return Gifts</a>
+<a href="#contact" class="block py-2 hover:bg-gray-600" onclick="closeMobileMenu()">Contact</a>
 </div>
 </header>
 
@@ -253,10 +253,7 @@ const cart = [];
 
 // Function to add a product to the cart
 function addToCart(productName, productPrice) {
-// Add the product to the cart
 cart.push({ name: productName, price: productPrice });
-
-// Update the cart summary in the header
 updateCartSummary();
 }
 
@@ -265,44 +262,55 @@ function updateCartSummary() {
 const totalItems = cart.length;
 const totalPrice = cart.reduce((sum, item) => sum + item.price, 0);
 
-// Update cart items and total price in the header
-document.getElementById('cart-total-items').textContent = `Cart: ${totalItems} items`;
+// Update cart count and total price
+document.getElementById('cart-count').textContent = totalItems;
 document.getElementById('cart-total-price').textContent = `Total: Rs. ${totalPrice}`;
 }
 
-// Function to view cart details (optional, redirect to cart page or show a modal)
+// Function to view cart details
 function viewCart() {
 if (cart.length === 0) {
 alert('Your cart is empty!');
 return;
 }
 
-let cartDetails = cart.map(item => `${item.name} - Rs. ${item.price}`).join('\n');
-cartDetails += `\n\nTotal: Rs. ${cart.reduce((sum, item) => sum + item.price, 0)}`;
 const totalAmount = cart.reduce((sum, item) => sum + item.price, 0);
-// cartDetails += `\n\nTotal: Rs. ${totalAmount}`;
-
-// Show cart details with "Buy Now" confirmation
-if (confirm(`${cartDetails}\n\nClick OK to proceed to Buy Now.`)) {
-// Redirect to buy.html with the total amount
+if (confirm(`Proceed to checkout with total: Rs. ${totalAmount}?`)) {
 window.location.href = `buy.html?amount=${totalAmount}`;
 }
 }
- function toggleDropdown() {
+
+// Function to toggle dropdown menu
+function toggleDropdown() {
 document.getElementById("dropdown-menu").classList.toggle("hidden");
 }
 
+// Function to close dropdown menu
+function closeDropdown() {
+document.getElementById("dropdown-menu").classList.add("hidden");
+}
+
+// Function to close mobile menu
+function closeMobileMenu() {
+document.getElementById("mobile-menu").classList.add("hidden");
+}
+
+// Event listener for mobile menu toggle
 document.getElementById("menu-toggle").addEventListener("click", function () {
 document.getElementById("mobile-menu").classList.toggle("hidden");
 });
 
-function viewCart() {
-alert("Redirecting to cart page...");
-}
-
-
-
+// Smooth scrolling for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+anchor.addEventListener('click', function (e) {
+e.preventDefault();
+document.querySelector(this.getAttribute('href')).scrollIntoView({
+behavior: 'smooth'
+});
+});
+});
 </script>
+
 
 </body>
 </html>
